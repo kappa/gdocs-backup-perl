@@ -36,7 +36,6 @@ my $gdocs = Net::Google::DocumentsList->new(
 my @items = $gdocs->items;
 
 for (@items) {
-    last;
     say "Downloading " . $_->title;
     $_->export({
     	    format  => $save_as{$_->kind},
