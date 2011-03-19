@@ -37,10 +37,10 @@ my @items = $gdocs->items;
 
 for (@items) {
     say "Downloading " . $_->title;
+    (my $filename = $_->title) =~ y{/}{_};
     $_->export({
-    	    format  => $save_as{$_->kind},
-    	    file    => "$output_dir/" . $_->title
-    	                . "." . $save_as{$_->kind},
+        format  => $save_as{$_->kind},
+        file    => "$output_dir/$filename.$save_as{$_->kind}",
     });
 }
 
