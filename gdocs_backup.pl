@@ -36,12 +36,20 @@ my $gdocs = Net::Google::DocumentsList->new(
 my @items = $gdocs->items;
 
 for (@items) {
-    say "Downloading " . $_->title;
+    say "Downloading " . $_->title . " as " . $_->kind;
     (my $filename = $_->title) =~ y{/}{_};
-    $_->export({
-        format  => $save_as{$_->kind},
-        file    => "$output_dir/$filename.$save_as{$_->kind}",
-    });
+    if (my $ext = $save_as{$_->kind}) {
+        $_->export({
+            format  => $ext,
+            file    => "$output_dir/$filename.$ext",
+        });
+    }
+    else {
+        next if $_->kind ~~ ['map', 'form'];
+        $_->export({
+            file    => "$output_dir/$filename",
+        });
+    }
 }
 
 say "Saving metadata.json";
